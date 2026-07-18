@@ -43,7 +43,7 @@
 }
 
 .hero, .pros, .questions, .formSection {
-  padding: 60px 0;
+  padding: 60px 24px;
   width: 100%;
 }
 
