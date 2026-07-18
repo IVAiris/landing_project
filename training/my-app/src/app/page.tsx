@@ -14,6 +14,8 @@ export default function Home() {
     description: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -49,10 +51,46 @@ export default function Home() {
     return valid;
   };
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (!validateForm()) {
+      return;
+    }
+
+    setSubmitError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          description: formData.description
+        })
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          const data = await response.json();
+          const fieldErrors = data.errors ?? {};
+          setErrors({
+            name: fieldErrors.name?.[0] ?? "",
+            email: fieldErrors.email?.[0] ?? "",
+            description: fieldErrors.description?.[0] ?? ""
+          });
+        } else {
+          setSubmitError("Не удалось отправить заявку. Попробуйте снова позже.");
+        }
+        return;
+      }
+
       setIsSubmitted(true);
+    } catch {
+      setSubmitError("Не удалось отправить заявку. Проверьте соединение и попробуйте снова.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -123,7 +161,10 @@ export default function Home() {
               />
               {errors.description && <span className={styles.error}>{errors.description}</span>}
             </div>
-            <button type="submit" className={styles.submitButton}>Submit</button>
+            {submitError && <span className={styles.error}>{submitError}</span>}
+            <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+              {isSubmitting ? "Sending..." : "Submit"}
+            </button>
           </form>
         )}
       </section>
