@@ -9,6 +9,9 @@
   --button-secondary-hover: #f2f2f2;
   --button-secondary-border: #ebebeb;
 
+  --error-color: #ff3333;
+  --success-color: #4caf50;
+
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -28,6 +31,74 @@
   justify-content: space-between;
   background-color: var(--foreground);
   padding: 120px 60px;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  justify-content: center;
+  background-color: var(--background);
+}
+
+.hero, .pros, .questions, .formSection {
+  padding: 60px 0;
+  width: 100%;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.pros ul, .questions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pros li, .questions li {
+  margin-bottom: 0.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input, .formGroup textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.error {
+  color: var(--error-color);
+  font-size: 0.8rem;
+}
+
+.success {
+  color: var(--success-color);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.submitButton {
+  background-color: var(--text-primary);
+  color: var(--background);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: var(--button-primary-hover);
 }
 
 .intro {
