@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requestSchema } from "@/lib/validation/requestSchema";
+import { saveRequest } from "@/lib/db";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -16,8 +17,16 @@ export async function POST(request: Request) {
     );
   }
 
+  try {
+    await saveRequest(result.data);
+  } catch {
+    return NextResponse.json(
+      { message: "Не удалось сохранить заявку, попробуйте позже" },
+      { status: 500 }
+    );
+  }
+
   return NextResponse.json({
-    message: "API-роут работает",
-    received: result.data,
+    message: "Заявка сохранена",
   });
 }
